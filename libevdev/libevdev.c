@@ -109,19 +109,27 @@ log_msg(enum libevdev_log_priority priority,
 	va_end(args);
 }
 
-LIBEVDEV_EXPORT struct libevdev*
-libevdev_new(void)
+static void
+libevdev_reset(struct libevdev *dev)
 {
-	struct libevdev *dev;
-
-	dev = calloc(1, sizeof(*dev));
-	if (!dev)
-		return NULL;
+	memset(dev, 0, sizeof(*dev));
 	dev->fd = -1;
 	dev->num_slots = -1;
 	dev->current_slot = -1;
 	dev->grabbed = LIBEVDEV_UNGRAB;
 	dev->sync_state = SYNC_NONE;
+}
+
+LIBEVDEV_EXPORT struct libevdev*
+libevdev_new(void)
+{
+	struct libevdev *dev;
+
+	dev = malloc(sizeof(*dev));
+	if (!dev)
+		return NULL;
+
+	libevdev_reset(dev);
 
 	return dev;
 }
@@ -208,6 +216,8 @@ libevdev_set_fd(struct libevdev* dev, int fd)
 		log_bug("device already initialized.\n");
 		return -EBADF;
 	}
+
+	libevdev_reset(dev);
 
 	rc = ioctl(fd, EVIOCGBIT(0, sizeof(dev->bits)), dev->bits);
 	if (rc < 0)
@@ -352,6 +362,8 @@ libevdev_set_fd(struct libevdev* dev, int fd)
 	 */
 
 out:
+	if (rc)
+		libevdev_reset(dev);
 	return rc ? -errno : 0;
 }
 
