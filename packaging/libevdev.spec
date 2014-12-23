@@ -1,5 +1,5 @@
 Name:           libevdev
-Version:        1.0
+Version:        1.2.2
 Release:        0
 License:        MIT
 Summary:        wrapper library for evdev input devices
@@ -33,11 +33,11 @@ interface to the callers, thus avoiding erroneous ioctls, etc.
 %autogen
 
 %build
-make %{?jobs:-j%jobs} V=1
+%__make %{?jobs:-j%jobs} V=1
 
 %install
 %make_install
-#%fdupes %{buildroot}
+#%%fdupes %%{buildroot}
 
 %post -p /sbin/ldconfig
 
@@ -48,7 +48,7 @@ make %{?jobs:-j%jobs} V=1
 %defattr(-,root,root)
 %{_libdir}/*.so.*
 %{_datadir}/*
-
+%{_bindir}/touchpad-edge-detector
 
 %files devel
 %defattr(-,root,root,-)
