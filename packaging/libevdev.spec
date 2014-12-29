@@ -1,5 +1,5 @@
 Name:           libevdev
-Version:        1.0
+Version:        1.2.2
 Release:        0
 License:        MIT
 Summary:        wrapper library for evdev input devices
@@ -46,6 +46,7 @@ make %{?jobs:-j%jobs} V=1
 
 %files
 %defattr(-,root,root)
+%{_bindir}/touchpad-edge-detector
 %{_libdir}/*.so.*
 %{_datadir}/*
 
