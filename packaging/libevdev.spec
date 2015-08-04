@@ -6,6 +6,7 @@ Summary:        wrapper library for evdev input devices
 Url:            git://anongit.freedesktop.org/libevdev
 Group:          System/Libraries
 Source:         %{name}-%{version}.tar.gz
+Source1001:		%name.manifest
 
 BuildRequires:  doxygen
 BuildRequires:  make
@@ -30,6 +31,7 @@ interface to the callers, thus avoiding erroneous ioctls, etc.
 
 %prep
 %setup -q
+cp %{SOURCE1001} .
 %autogen
 
 %build
@@ -45,6 +47,7 @@ make %{?jobs:-j%jobs} V=1
 
 
 %files
+%manifest %{name}.manifest
 %defattr(-,root,root)
 %{_bindir}/touchpad-edge-detector
 %{_libdir}/*.so.*
@@ -52,6 +55,7 @@ make %{?jobs:-j%jobs} V=1
 
 
 %files devel
+%manifest %{name}.manifest
 %defattr(-,root,root,-)
 %{_includedir}/*
 %{_libdir}/*.so
