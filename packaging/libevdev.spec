@@ -12,6 +12,7 @@ BuildRequires:  doxygen
 BuildRequires:  make
 BuildRequires:  python
 
+%global TZ_SYS_RO_SHARE  %{?TZ_SYS_RO_SHARE:%TZ_SYS_RO_SHARE}%{!?TZ_SYS_RO_SHARE:/usr/share}
 
 %description
 libevdev is a wrapper library for evdev devices. it moves the common
@@ -41,6 +42,10 @@ make %{?jobs:-j%jobs} V=1
 %make_install
 #%fdupes %{buildroot}
 
+# for license notification
+mkdir -p %{buildroot}/%{TZ_SYS_RO_SHARE}/license
+cp -a %{_builddir}/%{buildsubdir}/COPYING %{buildroot}/%{TZ_SYS_RO_SHARE}/license/%{name}
+
 %post -p /sbin/ldconfig
 
 %postun -p /sbin/ldconfig
@@ -49,6 +54,7 @@ make %{?jobs:-j%jobs} V=1
 %files
 %manifest %{name}.manifest
 %defattr(-,root,root)
+%{TZ_SYS_RO_SHARE}/license/%{name}
 %{_bindir}/touchpad-edge-detector
 %{_libdir}/*.so.*
 %{_datadir}/*
